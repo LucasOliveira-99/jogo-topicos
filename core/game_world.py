@@ -1,18 +1,22 @@
 import pygame
 
 from core.game_scene import GameScene
+from core.camera import Camera
+from objects.player import Player
 
 
 class GameWorld(GameScene):
-    """World inicial temporário para permitir fluxo de navegação do menu."""
+    """World inicial com jogador e câmera seguindo o personagem."""
 
     def __init__(self, game_manager):
         super().__init__(game_manager)
-        self.font = None
-
-    def _ensure_font(self):
-        if self.font is None:
-            self.font = pygame.font.SysFont("arial", 28)
+        self.camera = Camera(game_manager.screen_width, game_manager.screen_height)
+        self.player = Player(
+            x=game_manager.screen_width / 2,
+            y=game_manager.screen_height / 2,
+            width=32,
+            height=32,
+        )
 
     def handle_events(self, events: list[pygame.event.Event]):
         for event in events:
@@ -20,11 +24,9 @@ class GameWorld(GameScene):
                 self.game_manager.running = False
 
     def update(self, dt: float):
-        pass
+        self.player.update(dt)
+        self.camera.follow(self.player.rect)
 
     def draw(self, screen: pygame.Surface):
-        self._ensure_font()
         screen.fill((20, 20, 25))
-        text = self.font.render("GameWorld inicial (ESC para sair)", True, (220, 220, 220))
-        screen.blit(text, text.get_rect(center=(self.game_manager.screen_width // 2,
-                                                self.game_manager.screen_height // 2)))
+        self.player.draw(screen, self.camera)
