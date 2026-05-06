@@ -16,6 +16,7 @@ class GameWorld(GameScene):
         self.small_font = None
         self.game_over = False
         self.kills = 0
+        self.elapsed_time = 0.0
         self.projectiles: list[Projectile] = []
         self.last_aim_direction = pygame.math.Vector2(1.0, 0.0)
         self.camera = Camera(game_manager.screen_width, game_manager.screen_height)
@@ -64,6 +65,7 @@ class GameWorld(GameScene):
         if self.game_over:
             return
 
+        self.elapsed_time += dt
         self.player.update(dt)
         if self.player.velocity_x != 0.0 or self.player.velocity_y != 0.0:
             self.last_aim_direction = pygame.math.Vector2(
@@ -122,6 +124,13 @@ class GameWorld(GameScene):
             f"Eliminacoes: {self.kills}", True, (220, 220, 220)
         )
         screen.blit(kills_text, (10, 36))
+        total_seconds = int(self.elapsed_time)
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        time_text = self.small_font.render(
+            f"Tempo: {minutes:02d}:{seconds:02d}", True, (200, 200, 200)
+        )
+        screen.blit(time_text, (10, 62))
 
         if self.game_over:
             self._ensure_fonts()
