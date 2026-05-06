@@ -15,6 +15,7 @@ class GameWorld(GameScene):
         self.font = None
         self.small_font = None
         self.game_over = False
+        self.kills = 0
         self.projectiles: list[Projectile] = []
         self.last_aim_direction = pygame.math.Vector2(1.0, 0.0)
         self.camera = Camera(game_manager.screen_width, game_manager.screen_height)
@@ -85,9 +86,12 @@ class GameWorld(GameScene):
             if not projectile.active:
                 continue
             for enemy in self.enemies:
+                if not enemy.active:
+                    continue
                 if projectile.rect.colliderect(enemy.rect):
                     projectile.active = False
                     enemy.active = False
+                    self.kills += 1
                     break
 
         self.projectiles = [projectile for projectile in self.projectiles if projectile.active]
@@ -114,6 +118,10 @@ class GameWorld(GameScene):
             f"Inimigos restantes: {len(self.enemies)}", True, (255, 255, 255)
         )
         screen.blit(hud_text, (10, 10))
+        kills_text = self.small_font.render(
+            f"Eliminacoes: {self.kills}", True, (220, 220, 220)
+        )
+        screen.blit(kills_text, (10, 36))
 
         if self.game_over:
             self._ensure_fonts()
