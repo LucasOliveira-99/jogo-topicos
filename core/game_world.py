@@ -107,6 +107,14 @@ class GameWorld(GameScene):
         
         # Desenhar jogador por último (no topo)
         self.player.draw(screen, self.camera)
+
+        # Desenhar HUD
+        self._ensure_fonts()
+        hud_text = self.small_font.render(
+            f"Inimigos restantes: {len(self.enemies)}", True, (255, 255, 255)
+        )
+        screen.blit(hud_text, (10, 10))
+
         if self.game_over:
             self._ensure_fonts()
             overlay = pygame.Surface(
