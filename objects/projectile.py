@@ -17,7 +17,7 @@ class Projectile(GameObject):
     lifetime: float = 0.0
 
     def update(self, dt: float):
-        super().update(dt)
+        GameObject.update(self, dt)
         self.lifetime += dt
         if self.lifetime >= self.max_lifetime:
             self.active = False

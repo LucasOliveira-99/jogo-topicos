@@ -35,7 +35,7 @@ class Player(GameObject):
 
     def update(self, dt: float):
         self.handle_input()
-        super().update(dt)
+        GameObject.update(self, dt)
 
     def draw(self, screen: pygame.Surface, camera=None):
         rect = self.rect

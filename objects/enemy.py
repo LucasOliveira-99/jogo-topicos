@@ -65,7 +65,7 @@ class Enemy(GameObject):
             self.patrol()
 
         # Atualizar posição baseado na velocidade
-        super().update(dt)
+        GameObject.update(self, dt)
 
     def draw(self, screen: pygame.Surface, camera=None):
         """Desenha o inimigo na tela."""
